@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import dotenv from 'dotenv';
+import { extractAddedLinesWithRelativeNumbers } from './diff-util.js';
 
 // Load environment variables first
 dotenv.config();
@@ -167,56 +168,43 @@ async function analyzeFile(file, pr) {
 }
 
 function extractChangedLines(diff) {
-  const lines = diff.split('\n');
-  const changedLines = [];
-  let fileLineNumber = 0;
-  let addedLineNumber = 0;
-  let removedLineNumber = 0;
-  let globalDiffPosition = 0; // global position across all hunks
+  // Use the shared diff utility to get added lines with relative line numbers
+  const addedLines = extractAddedLinesWithRelativeNumbers(diff);
   let addedCount = 0;
   let deletedCount = 0;
+  const lines = diff.split('\n');
+  let removedLineNumber = 0;
+  let globalDiffPosition = 0;
 
-  console.log(chalk.gray(`    🔍 Analyzing diff with ${lines.length} lines...`));
-
+  // For logging and to keep the same interface as before, we also count deleted lines
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     if (line.startsWith('@@')) {
       const match = line.match(/@@ -(\d+),?(\d+)? \+(\d+),?(\d+)? @@/);
       if (match) {
         removedLineNumber = parseInt(match[1]);
-        addedLineNumber = parseInt(match[3]);
-        fileLineNumber = addedLineNumber;
-        // DO NOT increment globalDiffPosition for hunk headers
-        console.log(chalk.gray(`    📍 Hunk: -${removedLineNumber} +${addedLineNumber} (fileLineNumber: ${fileLineNumber})`));
       }
     } else {
       globalDiffPosition++;
       if (line.startsWith('+') && !line.startsWith('+++')) {
-        // Only track added lines (translations that were added)
-        const addedLine = {
-          type: 'added',
-          content: line.substring(1),
-          fileLineNumber: fileLineNumber,
-          diffPosition: globalDiffPosition
-        };
-        changedLines.push(addedLine);
-        console.log(chalk.gray(`    ➕ Added line ${addedCount + 1}: diffPosition=${globalDiffPosition}, fileLine=${fileLineNumber}, content="${line.substring(1).substring(0, 50)}..."`));
-        fileLineNumber++;
         addedCount++;
       } else if (line.startsWith('-') && !line.startsWith('---')) {
-        // Track deleted lines for logging but don't include them in analysis
         deletedCount++;
         removedLineNumber++;
-        console.log(chalk.gray(`    ➖ Deleted line: diffPosition=${globalDiffPosition}, content="${line.substring(1).substring(0, 50)}..."`));
-      } else if (!line.startsWith('+++') && !line.startsWith('---')) {
-        // Context lines (unchanged lines)
-        fileLineNumber++;
       }
     }
   }
-  
+
+  // Log summary
   console.log(chalk.gray(`    📊 Found ${addedCount} added lines and ${deletedCount} deleted lines (only analyzing added lines)`));
-  return changedLines;
+
+  // Map to the expected format for downstream code
+  return addedLines.map(l => ({
+    type: 'added',
+    content: l.content,
+    diffPosition: l.relativeLine, // This is the correct GitHub API position
+    fileLineNumber: l.newLine
+  }));
 }
 
 async function analyzeWithAI(filename, changedLines, prTitle, pr) {

@@ -26,7 +26,7 @@ export async function postComments(prNumber, reportFile) {
         if (typeof comment.diffPosition === 'number' && comment.diffPosition > 0) {
           allComments.push({
             path: file.filename,
-            position: comment.diffPosition + 1, // Add +1 offset to fix line positioning
+            position: comment.diffPosition, // Use the correct relative line number
             body: formatLineComment(comment, 'comment')
           });
         }

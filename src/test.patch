@@ -1,0 +1,378 @@
+From 01011b90aaff9c295081c0ee95266323a9912d83 Mon Sep 17 00:00:00 2001
+From: Creative <145705414+BeingCreativeMN@users.noreply.github.com>
+Date: Thu, 19 Jun 2025 19:41:31 +0800
+Subject: [PATCH 1/6] Update portal.json
+
+---
+ ghost/i18n/locales/mn/portal.json | 62 +++++++++++++++----------------
+ 1 file changed, 31 insertions(+), 31 deletions(-)
+
+diff --git a/ghost/i18n/locales/mn/portal.json b/ghost/i18n/locales/mn/portal.json
+index d8ce7d26a9e..1601d9a926f 100644
+--- a/ghost/i18n/locales/mn/portal.json
++++ b/ghost/i18n/locales/mn/portal.json
+@@ -28,7 +28,7 @@
+     "Cancel subscription": "Захиалгаа цуцлах",
+     "Cancellation reason": "Цуцалсан шалтгаан",
+     "Change": "Өөрчлөх",
+-    "Change plan": "Багцаа өөрчлөх",
++    "Change plan": "Багцаа солих",
+     "Check spam & promotions folders": "Спам ба промоушн хавтсаа шалгана уу",
+     "Check with your mail provider": "Имэйл үйлчилгээ үзүүлэгчтэйгээ холбогдоно уу",
+     "Check your inbox to verify email update": "Имэйл шинэчлэлтээ баталгаажуулахын тулд инбоксоо шалгана уу",
+@@ -36,9 +36,9 @@
+     "Choose a different plan": "Өөр багц сонгох",
+     "Choose a plan": "Багц сонгох",
+     "Choose your newsletters": "Товхимолоо сонгох",
+-    "Click here to retry": "Дахин оролдохын тулд энд дарна уу",
++    "Click here to retry": "Энд дарж ахин оролдоно уу",
+     "Close": "Хаах",
+-    "Comment preferences updated.": "Сэтгэгдлийн тохиргоо шинэчлэгдлээ.",
++    "Comment preferences updated.": "Тохиргоо шинэчлэгдлээ.",
+     "Comments": "Сэтгэгдлүүд",
+     "Complimentary": "Үнэгүй",
+     "Confirm": "Баталгаажуулах",
+@@ -83,10 +83,10 @@
+     "Forever": "Үүрд",
+     "Free Trial – Ends {trialEnd}": "Үнэгүй туршилт – {trialEnd} дуусна",
+     "Get help": "Тусламж авах",
+-    "Get in touch for help": "Тусламж авахаар холбогдох",
++    "Get in touch for help": "Тусламжын хэсэгтэй холбогдох",
+     "Get notified when someone replies to your comment": "Хэн нэгэн таны сэтгэгдэлд хариу бичих үед мэдэгдэх",
+     "Give feedback on this post": "Энэ нийтлэлд санал өгөх",
+-    "Help! I'm not receiving emails": "Тусламж! Би имэйл хүлээж авахгүй байна",
++    "Help! I'm not receiving emails": "Би имэйл хүлээж авахгүй байна",
+     "Here are a few other sites you may enjoy.": "Танд таалагдаж магадгүй бусад сайтууд.",
+     "If a newsletter is flagged as spam, emails are automatically disabled for that address to make sure you no longer receive any unwanted messages.": "Хэрвээ товхимолыг спам гэж тэмдэглэсэн бол тухайн хаягаас хүсээгүй имэйл ирэхгүй байхын тулд автоматаар имэйл илгээхийг идэвхгүй болгодог.",
+     "If the spam complaint was accidental, or you would like to begin receiving emails again, you can resubscribe to emails by clicking the button on the previous screen.": "Хэрвээ спам гэсэн мэдэгдэл санаандгүй байсан, эсвэл та дахин имэйл хүлээн авч эхлэхийг хүсэж байгаа бол өмнөх дэлгэц дээрх товчлуурыг дарж имэйлд дахин бүртгүүлж болно.",
+@@ -98,19 +98,19 @@
+     "In the event a permanent failure is received when attempting to send a newsletter, emails will be disabled on the account.": "Хэрвээ товхимолыг илгээхэд байнгын алдаа гарвал тухайн бүртгэлийн имэйл идэвхгүй болгогдоно.",
+     "In your email client add {senderEmail} to your contacts list. This signals to your mail provider that emails sent from this address should be trusted.": "Имэйл програмдаа {senderEmail}-г харилцагчийн жагсаалтандаа нэмнэ. Энэ нь таны имэйл үйлчилгээ үзүүлэгчид энэ хаягаас илгээсэн имэйлүүдийг итгэмжтэй гэж үзэхэд тусална.",
+     "Invalid email address": "Буруу имэйл хаяг",
+-    "Jamie Larson": "Доржийн Бат",
+-    "jamie@example.com": "bat@example.com",
++    "Jamie Larson": "Овог нэр",
++    "jamie@example.com": "нэр@example.com",
+     "Less like this": "Таалагдсангүй",
+     "Make sure emails aren't accidentally ending up in the Spam or Promotions folders of your inbox. If they are, click on \"Mark as not spam\" and/or \"Move to inbox\".": "Имэйлүүд таны Спам эсвэл Промоушн хавтсанд орохгүй байгаа эсэхийг шалгана уу. Хэрэв тийм бол \"Спам биш гэж тэмдэглэх\" эсвэл \"Инбокс руу зөөх\" гэсэн сонголтыг хийнэ үү.",
+     "Manage": "Удирдах",
+     "Maybe later": "Магадгүй дараа",
+-    "Memberships from this email domain are currently restricted.": "Энэхүү имэйл домэйнээс гишүүнчлэл авах нь хязгаарлагдсан байна.",
++    "Memberships from this email domain are currently restricted.": "Энэхүү имэйл-н домэйнийг бүртгүүлэхэд хязгаарласан байна.",
+     "Memberships unavailable, contact the owner for access.": "Гишүүнчлэл боломжгүй байна, хандах эрх авахын тулд эзэмшигчтэй холбогдоно уу.",
+     "month": "сар",
+     "Monthly": "Сарын",
+     "More like this": "Үүнтэй төстэй",
+     "Name": "Нэр",
+-    "Need more help? Contact support": "Тусламж хэрэгтэй юу? Лавлахтай холбогдоно уу",
++    "Need more help? Contact support": "Тусламж хэрэгтэй юу?",
+     "Newsletters can be disabled on your account for two reasons: A previous email was marked as spam, or attempting to send an email resulted in a permanent failure (bounce).": "Таны бүртгэл дээрх товхимолууд хоёр шалтгаанаар идэвхгүй болсон байж болно: Өмнөх имэйлийг спам гэж тэмдэглэсэн, эсвэл имэйлийг илгээх оролдлого байнгын алдаа (баунс) гаргасан.",
+     "No member exists with this e-mail address.": "Энэ имэйл хаягтай гишүүн байхгүй байна.",
+     "No member exists with this e-mail address. Please sign up first.": "Энэ имэйл хаягтай гишүүн байхгүй байна. Эхлээд бүртгүүлнэ үү.",
+@@ -131,55 +131,55 @@
+     "Renews at {price}.": "{price}-д шинэчлэгдэнэ.",
+     "Retry": "Дахин оролдох",
+     "Save": "Хадгалах",
+-    "Send an email and say hi!": "Имэйл илгээгээд мэндчилнэ үү!",
+-    "Send an email to {senderEmail} and say hello. This can also help signal to your mail provider that emails to and from this address should be trusted.": "{senderEmail} хаяг руу имэйл илгээж мэндчилнэ үү. Энэ нь таны имэйл үйлчилгээ үзүүлэгчид энэ хаягаас ирж буй имэйлүүдийг итгэмжтэй гэж үзэхэд тусална.",
++    "Send an email and say hi!": "Имэйл илгээгээд Hi! гэж мэндчилнэ үү!",
++    "Send an email to {senderEmail} and say hello. This can also help signal to your mail provider that emails to and from this address should be trusted.": "{senderEmail} хаяг руу имэйл илгээж баталгаажуулна уу. Энэ нь энэ хаягаас ирж буй имэйлүүдэд итгэж болно гэдгийг батлана.",
+     "Sending login link...": "Нэвтрэх холбоосыг илгээж байна...",
+     "Sending...": "Илгээж байна...",
+     "Show all": "Бүгдийг харуулах",
+     "Sign in": "Нэвтрэх",
+     "Sign out": "Гарах",
+     "Sign up": "Бүртгүүлэх",
+-    "Signup error: Invalid link": "Бүртгүүлэх алдаа: Буруу холбоос",
+-    "Signups from this email domain are currently restricted.": "Энэхүү имэйл домэйнээс бүртгүүлэх нь хязгаарлагдсан байна.",
+-    "Something went wrong, please try again later.": "Ямар нэг алдаа гарлаа, дараа дахин оролдоно уу.",
++    "Signup error: Invalid link": "Бүртгүүлэхэд алдаа гарлаа: Буруу холбоос",
++    "Signups from this email domain are currently restricted.": "Энэ домэйн имэйлээр бүртгүүлж болохгүй. Сайтын зүгээс хориглосон байна.",
++    "Something went wrong, please try again later.": "Алдаа гарлаа, дараа дахин оролдоно уу.",
+     "Sorry, no recommendations are available right now.": "Уучлаарай, одоогоор санал болгох зүйл алга байна.",
+     "Sorry, that didn’t work.": "Уучлаарай, амжилтгүй боллоо.",
+     "Spam complaints": "Спамын гомдлууд",
+     "Start {amount}-day free trial": "{amount} өдрийн үнэгүй туршилтыг эхлүүлэх",
+     "Starting {startDate}": "{startDate}-с эхэлнэ",
+-    "Starting today": "Өнөөдрөөс эхэлнэ",
+-    "Submit feedback": "Саналаа илгээх",
++    "Starting today": "Өнөөдрөөс эхлэнэ",
++    "Submit feedback": "Санал хүсэлт илгээх",
+     "Subscribe": "Захиалах",
+     "Subscribed": "Захиалсан",
+     "Subscription plan updated successfully": "Захиалгын багц амжилттай шинэчлэгдлээ",
+     "Success": "Амжилттай",
+-    "Success! Check your email for magic link to sign-in.": "Амжилттай! Нэвтрэх шидэт холбоосыг имэйлээсээ шалгана уу.",
+-    "Success! Your account is fully activated, you now have access to all content.": "Амжилттай! Таны бүртгэл бүрэн идэвхжлээ, та одоо бүх контентод хандах эрхтэй боллоо.",
+-    "Success! Your email is updated.": "Амжилттай! Таны имэйл шинэчлэгдлээ.",
++    "Success! Check your email for magic link to sign-in.": "Баталгаажуулах холбоосыг илгээсэн. Шуудангаа шалгана уу.",
++    "Success! Your account is fully activated, you now have access to all content.": "Таны бүртгэл бүрэн идэвхжиж контент үзэх эрх нээгдлээ.",
++    "Success! Your email is updated.": "Таны имэйл шинэчлэгдлээ.",
+     "Successfully unsubscribed": "Захиалгыг амжилттай цуцаллаа",
+     "Thank you for subscribing. Before you start reading, below are a few other sites you may enjoy.": "Захиалга өгсөнд баярлалаа. Унших хуудсаа эхлэхээс өмнө доор танд таалагдаж магадгүй хэдэн сайтуудыг санал болгож байна.",
+     "Thank you for your support": "Дэмжлэг үзүүлсэнд баярлалаа",
+     "Thank you for your support!": "Дэмжлэг үзүүлсэнд баярлалаа!",
+     "Thanks for the feedback!": "Саналаа илгээсэнд баярлалаа!",
+     "That didn't go to plan": "Төлөвлөгөөний дагуу болсонгүй",
+-    "The email address we have for you is {memberEmail} — if that's not correct, you can update it in your <button>account settings area</button>.": "Бидэнд байгаа таны имэйл хаяг бол {memberEmail} — хэрэв энэ буруу бол <button>бүртгэлийн тохиргоо</button> хэсэгт шинэчилж болно.",
++    "The email address we have for you is {memberEmail} — if that's not correct, you can update it in your <button>account settings area</button>.": "Таны бүртгүүлсэн имэйл хаяг: {memberEmail} — хэрэв энэ имэйл хаяг буруу бол <button>бүртгэлийн тохиргоо</button> хэсэгт шинэчилж өөрчлөөрэй.",
+     "There was a problem submitting your feedback. Please try again a little later.": "Таны саналыг хүлээн авахад асуудал гарлаа. Дараа дахин оролдоно уу.",
+     "There was an error cancelling your subscription, please try again.": "Таны захиалгыг цуцлахад алдаа гарлаа, дахин оролдоно уу.",
+     "There was an error continuing your subscription, please try again.": "Таны захиалгыг үргэлжлүүлэхэд алдаа гарлаа, дахин оролдоно уу.",
+     "There was an error processing your payment. Please try again.": "Таны төлбөрийг боловсруулахад алдаа гарлаа. Дахин оролдоно уу.",
+     "There was an error sending the email, please try again": "Имэйл илгээхэд алдаа гарлаа, дахин оролдоно уу",
+     "This site is invite-only, contact the owner for access.": "Энэхүү сайт руу зөвхөн урилгаар нэвтрэх боломжтой тул та админд нь хандана уу.",
+-    "This site is not accepting donations at the moment.": "",
+-    "This site is not accepting payments at the moment.": "Энэхүү сайт одоогоор төлбөр хүлээн авахгүй байна.",
+-    "This site only accepts paid members.": "Энэхүү сайт зөвхөн төлбөртэй гишүүдийг хүлээн авдаг.",
++    "This site is not accepting donations at the moment.": "Энэ сайт одоогоор хандив авахгүй байгаа.",
++    "This site is not accepting payments at the moment.": "Энэ сайт одоогоор төлбөр хүлээн авахгүй.",
++    "This site only accepts paid members.": "Зөвхөн бүртгэлтэй гишүүдэд зориулагдсан.",
+     "To complete signup, click the confirmation link in your inbox. If it doesn't arrive within 3 minutes, check your spam folder!": "Тан руу илгээсэн баталгаажуулах холбоос дээр дарж бүртгэлээ дуусгана уу. Хэрвээ 3 минутын дотор ирэхгүй бол спамаа шалгана уу!",
+     "To continue to stay up to date, subscribe to {publication} below.": "Мэдээллээ шинээр авахын тулд доорх {publication}-д захиалга өгнө үү.",
+     "Too many attempts try again in {number} days.": "Хэт олон оролдлого хийсэн тул {number} өдрийн дараа дахин оролдоно уу.",
+     "Too many attempts try again in {number} hours.": "Хэт олон оролдлого хийсэн тул {number} цагийн дараа дахин оролдоно уу.",
+     "Too many attempts try again in {number} minutes.": "Хэт олон оролдлого хийсэн тул {number} минутын дараа дахин оролдоно уу.",
+-    "Too many different sign-in attempts, try again in {number} days": "Хэт олон ялгаатай нэвтрэх оролдлого хийсэн тул {number} өдрийн дараа дахин оролдоно уу",
+-    "Too many different sign-in attempts, try again in {number} hours": "Хэт олон ялгаатай нэвтрэх оролдлого хийсэн тул {number} цагийн дараа дахин оролдоно уу",
+-    "Too many different sign-in attempts, try again in {number} minutes": "Хэт олон ялгаатай нэвтрэх оролдлого хийсэн тул {number} минутын дараа дахин оролдоно уу",
++    "Too many different sign-in attempts, try again in {number} days": "Хэт олон нэвтрэх оролдлого хийсэн тул {number} өдрийн дараа дахин оролдоно уу",
++    "Too many different sign-in attempts, try again in {number} hours": "Хэт олон нэвтрэх оролдлого хийсэн тул {number} цагийн дараа дахин оролдоно уу",
++    "Too many different sign-in attempts, try again in {number} minutes": "Хэт олон нэвтрэх оролдлого хийсэн тул {number} минутын дараа дахин оролдоно уу",
+     "Too many sign-up attempts, try again later": "Хэт олон бүртгүүлэх оролдлого хийсэн тул дараа дахин оролдоно уу",
+     "Try free for {amount} days, then {originalPrice}.": "{amount} өдөр үнэгүй турших, дараа нь {originalPrice}.",
+     "Unable to initiate checkout session": "Төлбөрийн хэсгийг эхлүүлэх боломжгүй",
+@@ -189,13 +189,13 @@
+     "Unsubscribed from all emails.": "Бүх имэйлийн захиалга цуцлагдлаа.",
+     "Unsubscribing from emails will not cancel your paid subscription to {title}": "Имэйлийг зогсоосон ч таны {title} төлбөртэй захиалга цуцлагдахгүй",
+     "Update": "Шинэчлэх",
+-    "Update your preferences": "Тохиргоогоо шинэчлэх",
++    "Update your preferences": "Тохиргоо шинэчлэх",
+     "Verification link sent, check your inbox": "Баталгаажуулах холбоос илгээгдлээ, шуудангаа шалгана уу",
+     "Verify your email address is correct": "Имэйл хаягаа зөв эсэхийг шалгана уу",
+     "View plans": "Багцуудыг харах",
+     "We couldn't unsubscribe you as the email address was not found. Please contact the site owner.": "Энэхүү имэйл хаяг олдоогүй учир захиалгыг цуцлах боломжгүй. Та сайтын админд хандана уу.",
+-    "Welcome back, {name}!": "Дахин тавтай морил, {name}!",
+-    "Welcome back!": "Дахин тавтай морил!",
++    "Welcome back, {name}!": "Тавтай морил, {name}!",
++    "Welcome back!": "Тавтай морил!",
+     "Welcome to {siteTitle}": "{siteTitle}-д тавтай морил",
+     "When an inbox fails to accept an email it is commonly called a bounce. In many cases, this can be temporary. However, in some cases, a bounced email can be returned as a permanent failure when an email address is invalid or non-existent.": "Инбокс имэйл хүлээн авч чадахгүй үед түүнийг баунс гэж нэрлэдэг. Ихэнх тохиолдолд энэ нь түр зуурын байж болно. Гэвч заримдаа, имэйл хаяг хүчингүй эсвэл байхгүй үед буцаагдсан имэйл нь байнгын алдаа болж чадна.",
+     "Why has my email been disabled?": "Яагаад миний имэйл идэвхгүй болсон бэ?",
+@@ -204,9 +204,9 @@
+     "You currently have a free membership, upgrade to a paid subscription for full access.": "Та одоогоор үнэгүй гишүүнчлэлтэй байна, бүрэн эрхтэй болохын тулд төлбөртэй захиалга руу шинэчилнэ үү.",
+     "You have been successfully resubscribed": "Таны захиалга амжилттай дахин идэвхжлээ",
+     "You're currently not receiving emails": "Та одоогоор имэйл хүлээж авах тохиргоогүй байна",
+-    "You're not receiving emails": "Та имэйл хүлээж тохиргоогүй байна",
++    "You're not receiving emails": "Та имэйл хүлээн авах тохиргоогүй байна",
+     "You're not receiving emails because you either marked a recent message as spam, or because messages could not be delivered to your provided email address.": "Таны имэйл хүлээж авахгүй байгаа шалтгаан нь нэг бол та аль нэг имэйлийг спам гэж тэмдэглэсэн, эсвэл таны хаяг имэйл хүлээж авах боломжгүй байна.",
+-    "You've successfully signed in.": "Та амжилттай нэвтэрлээ.",
++    "You've successfully signed in.": "Амжилттай нэвтэрлээ.",
+     "You've successfully subscribed to": "Таны захиалга амжилттай үүслээ.",
+     "Your account": "Таны бүртгэл",
+     "Your email has failed to resubscribe, please try again": "Таны имэйлийг дахин захиалахад алдаа гарлаа, дахин оролдоно уу",
+
+From 3e2ac3426fbd8604a11c6198b62a99c2300560c2 Mon Sep 17 00:00:00 2001
+From: Creative <145705414+BeingCreativeMN@users.noreply.github.com>
+Date: Thu, 19 Jun 2025 19:43:55 +0800
+Subject: [PATCH 2/6] Update signup-form.json
+
+---
+ ghost/i18n/locales/mn/signup-form.json | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/ghost/i18n/locales/mn/signup-form.json b/ghost/i18n/locales/mn/signup-form.json
+index 50a03e85fe6..6d3aeaac43d 100644
+--- a/ghost/i18n/locales/mn/signup-form.json
++++ b/ghost/i18n/locales/mn/signup-form.json
+@@ -1,9 +1,9 @@
+ {
+-    "Email sent": "Имэйл илгээгдлээ",
+-    "Now check your email!": "Одоо имэйлээ шалгана уу!",
++    "Email sent": "Имэйл илгээгдсэн",
++    "Now check your email!": "Имэйлээ шалгана уу!",
+     "Please enter a valid email address": "Зөв имэйл хаяг оруулна уу",
+     "Something went wrong, please try again.": "Алдаа гарлаа, дахин оролдоно уу.",
+-    "Subscribe": "Захиалах",
+-    "To complete signup, click the confirmation link in your inbox. If it doesn't arrive within 3 minutes, check your spam folder!": "Бүртгэлээ дуусгахын тулд инбоксдоо ирсэн баталгаажуулах холбоос дээр дарна уу. Хэрвээ 3 минутын дотор ирэхгүй бол спамаа шалгана уу!",
+-    "Your email address": "Таны имэйл хаяг"
++    "Subscribe": "Subscribe",
++    "To complete signup, click the confirmation link in your inbox. If it doesn't arrive within 3 minutes, check your spam folder!": "Бүртгэлээ дуусгахын тулд имэйлд ирсэн холбоос дээр дарна уу. Хэрвээ 3 минутын дотор ирэхгүй бол спамаа шалгана уу!",
++    "Your email address": "Имэйл хаяг"
+ }
+
+From 2aea21404802fdacdd28a65080cf8b8514044ad5 Mon Sep 17 00:00:00 2001
+From: Creative <145705414+BeingCreativeMN@users.noreply.github.com>
+Date: Thu, 19 Jun 2025 19:53:43 +0800
+Subject: [PATCH 3/6] Update ghost.json
+
+---
+ ghost/i18n/locales/mn/ghost.json | 40 ++++++++++++++++----------------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
+
+diff --git a/ghost/i18n/locales/mn/ghost.json b/ghost/i18n/locales/mn/ghost.json
+index 8395c1bda0b..525607ce734 100644
+--- a/ghost/i18n/locales/mn/ghost.json
++++ b/ghost/i18n/locales/mn/ghost.json
+@@ -2,20 +2,20 @@
+     "{date}": "{date}",
+     "All the best!": "Баярлалаа!",
+     "Become a paid member of {site} to get access to all premium content.": "{site}-н бүх премиум контентод хандах эрхтэй болохын тулд төлбөртэй гишүүн болно уу.",
+-    "By {authors}": "Нийтэлсэн: {authors}",
++    "By {authors}": "Нийтлэсэн: {authors}",
+     "Comment": "Сэтгэгдэл",
+     "Complete signup for {siteTitle}!": "{siteTitle} бүртгэлээ дуусгана уу!",
+     "Complete your sign up to {siteTitle}!": "{siteTitle} бүртгэлээ дуусгана уу!",
+     "complimentary": "бэлэглэсэн",
+-    "Confirm email address": "Имэйл хаягаа баталгаажуулах",
+-    "Confirm signup": "Бүртгэлээ баталгаажуулах",
++    "Confirm email address": "Имэйл хаягаа баталгаажуулна уу",
++    "Confirm signup": "Бүртгэл баталгаажуулах",
+     "Confirm your email address": "Имэйл хаягаа баталгаажуулах",
+-    "Confirm your email update for {siteTitle}!": "{siteTitle} шинэчилсэн имэйл хаягаа баталгаажуулна уу!",
++    "Confirm your email update for {siteTitle}!": "{siteTitle} шинэ имэйл хаягаа баталгаажуулна уу!",
+     "Confirm your subscription to {siteTitle}": "{siteTitle} захиалгаа баталгаажуулах",
+     "Device:": "Төхөөрөмж:",
+     "Email": "Имэйл",
+-    "For security verification, enter the code below to sign in to {siteTitle}:": "Аюулгүй байдлын шалгалтын тулд доорх кодыг оруулан {siteTitle}-д нэвтэрнэ үү:",
+-    "For your security, the link will expire in 24 hours time.": "Нууцлалын шалтгаанаар энэхүү холбоос нь 24 цагийн дараа хүчингүй болно.",
++    "For security verification, enter the code below to sign in to {siteTitle}:": "Аюулгүй байдлын үүднээсдоорх кодыг оруулан {siteTitle}-д нэвтэрнэ үү:",
++    "For your security, the link will expire in 24 hours time.": "Нууцлалын шалтгаанаар энэхүү холбоос 24 цагийн дараа хүчингүй болно.",
+     "free": "үнэгүй",
+     "Here's your code to login to {siteTitle}": "{siteTitle}-д нэвтрэх код:",
+     "Hey there,": "Сайн уу,",
+@@ -25,20 +25,20 @@
+     "If you didn't try to sign in recently, you can safely ignore this email to deny access.": "Хэрвээ та сүүлийн үед нэвтрэх оролдлого хийгээгүй бол энэ имэйлийг тоолгүй орхиж болно.",
+     "Keep reading": "Үргэлжлүүлэн унших",
+     "Less like this": "Таалагдсангүй",
+-    "Manage subscription": "Захиалгаа удирдах",
++    "Manage subscription": "Subscribe тохиргоо",
+     "Member since": "Гишүүн болсон огноо",
+-    "More like this": "Үүнтэй ижилхэн",
++    "More like this": "Төстэй нийтлэлүүд",
+     "Name": "Нэр",
+-    "New comment on {postTitle}": "",
+-    "New reply to your comment on {siteTitle}": "",
++    "New comment on {postTitle}": "Таны нийтлэлд шинэ сэтгэгдэл нэмэгдлээ",
++    "New reply to your comment on {siteTitle}": "Таны сэтгэгдэлд шинэ хариу нэмэгдлээ",
+     "paid": "төлбөртэй",
+     "Please confirm your email address with this link:": "Та өөрийн имэйл хаягаа дараах холбоосоор баталгаажуулна уу:",
+     "Secure sign in link for {siteTitle}": "{siteTitle}-д нэвтрэх нууцлал бүхий холбоос",
+-    "See you soon!": "Удахгүй уулзацгаая!",
++    "See you soon!": "Биднийг дэмждэг баярлалаа!",
+     "Sent to {email}": "{email} хаяг руу илгээлээ",
+     "Sign in": "Нэвтрэх",
+     "Sign in to {siteTitle}": "{siteTitle}-д нэвтрэх",
+-    "Sign in verification": "Нэвтрэх баталгаажуулалт",
++    "Sign in verification": "Нэвтрэлт баталгаажуулалт",
+     "Someone just replied to your comment": "",
+     "Someone just replied to your comment on {postTitle}.": "",
+     "Subscription details": "Захиалгын дэлгэрэнгүй",
+@@ -50,22 +50,22 @@
+     "This email address will not be used.": "Энэхүү имэйл хаяг ашиглагдахгүй.",
+     "This message was sent from {siteDomain} to {email}.": "",
+     "trialing": "туршиж байна",
+-    "Unsubscribe": "Захиалга цуцлах",
++    "Unsubscribe": "Unsubscribe",
+     "Unsubscribe from comment reply notifications": "",
+     "Upgrade": "Шинэчлэх",
+     "Upgrade to continue reading.": "Үргэлжлүүлэн уншихын тулд захиалгаа шинэчлэнэ үү.",
+     "View comments": "",
+-    "View in browser": "Хөтөч дээр харах",
++    "View in browser": "Үндсэн сайт дээр үзэх",
+     "Welcome back to {siteTitle}!": "{siteTitle}-д тавтай морилно уу!",
+-    "Welcome back! Use this link to securely sign in to your {siteTitle} account:": "Дахин тавтай морилно уу! Энэхүү холбоосыг ашиглан {siteTitle}-д нэвтрэнэ үү:",
++    "Welcome back! Use this link to securely sign in to your {siteTitle} account:": "Тавтай морилно уу! Энэхүү холбоосыг ашиглан {siteTitle}-д нэвтрэнэ үү:",
+     "When:": "Хэзээ:",
+     "Where:": "Хаана:",
+-    "You are receiving this because you are a <strong>%%{status}%% subscriber</strong> to {site}.": "Та {site}-н <strong>%%{status}%% захиалагч</strong> учраас үүнийг хүлээн авч байна.",
+-    "You can also copy & paste this URL into your browser:": "Мөн та энэ холбоосыг хуулж аван өөрийн интернет хөтөч рүүгээ оруулж болно:",
++    "You are receiving this because you are a <strong>%%{status}%% subscriber</strong> to {site}.": "Та {site}-н <strong>%%{status}%% subscriber</strong> учраас үүнийг хүлээн авч байна.",
++    "You can also copy & paste this URL into your browser:": "Мөн та энэ холбоосыг хуулж аван броузер дээр оруулж болно:",
+     "You can unsubscribe from these notifications at {profileUrl}.": "",
+-    "You just tried to access your account from a new device.": "Та саяхан шинэ төхөөрөмжөөс бүртгэлдээ хандах гэж оролдлоо.",
+-    "You will not be signed up, and no account will be created for you.": "Та бүртгэгдэхгүй бөгөөд танд ямар нэгэн бүртгэл үүсэхгүй.",
+-    "You will not be subscribed.": "Таны захиалга үүсэхгүй.",
++    "You just tried to access your account from a new device.": "Шинэ төхөөрөмж ашиглан таны аккаунтруу нэвтрэх оролдолого хийгдлээ.",
++    "You will not be signed up, and no account will be created for you.": "Таны бүртгэл устгагдах болно.",
++    "You will not be subscribed.": "Та subscribe байхаа болих болно.",
+     "You're one tap away from subscribing to {siteTitle} — please confirm your email address with this link:": "Таны {siteTitle} захиалга идэвжихэд ганцхан алхам үлдлээ - энэхүү холбоосоор өөрийн имэйлээ идэхжүүлнэ үү:",
+     "You're one tap away from subscribing to {siteTitle}!": "Та {siteTitle}-д захиалга өгөхөд ганцхан алхам үлдлээ!",
+     "Your free trial ends on {date}, at which time you will be charged the regular price. You can always cancel before then.": "Таны үнэгүй туршилт {date}-нд дуусах бөгөөд энэ үед танаас үндсэн үнийг авна. Та үүнээс өмнө хэзээ ч цуцалж болно.",
+
+From 385d59749670cfb224e1009cd21ec849233a0d78 Mon Sep 17 00:00:00 2001
+From: Creative <145705414+BeingCreativeMN@users.noreply.github.com>
+Date: Thu, 19 Jun 2025 19:55:01 +0800
+Subject: [PATCH 4/6] Update comments.json
+
+---
+ ghost/i18n/locales/mn/comments.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ghost/i18n/locales/mn/comments.json b/ghost/i18n/locales/mn/comments.json
+index 2468bc480f9..ba01f46eb03 100644
+--- a/ghost/i18n/locales/mn/comments.json
++++ b/ghost/i18n/locales/mn/comments.json
+@@ -34,7 +34,7 @@
+     "Hidden for members": "Гишүүдээс нуугдсан",
+     "Hide": "Нуух",
+     "Hide comment": "Сэтгэгдлийг нуух",
+-    "Jamie Larson": "Доржийн Бат",
++    "Jamie Larson": "Овог, нэр",
+     "Join the discussion": "Хэлэлцүүлэгт нэгдэх",
+     "Just now": "Дөнгөж сая",
+     "Load more ({amount})": "Дахин харах ({amount})",
+
+From de6b7b9b0c7d06f3d0a81eca3e6b46ecbc6f7e47 Mon Sep 17 00:00:00 2001
+From: Creative <145705414+BeingCreativeMN@users.noreply.github.com>
+Date: Thu, 19 Jun 2025 19:56:20 +0800
+Subject: [PATCH 5/6] Update search.json
+
+---
+ ghost/i18n/locales/mn/search.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ghost/i18n/locales/mn/search.json b/ghost/i18n/locales/mn/search.json
+index 0f30f0f3cb6..12c9f3b6870 100644
+--- a/ghost/i18n/locales/mn/search.json
++++ b/ghost/i18n/locales/mn/search.json
+@@ -1,6 +1,6 @@
+ {
+     "Authors": "Нийтлэгчид",
+-    "Cancel": "Цуцлах",
++    "Cancel": "Болих",
+     "No matches found": "Тохирох хайлтын үр дүн олдсонгүй",
+     "Posts": "Нийтлэлүүд",
+     "Search posts, tags and authors": "Нийтлэл, ангилал, нийтлэгчдээр хайх",
+
+From 108c7e23c87484f8a5d2c8e3dc858827715a4a9f Mon Sep 17 00:00:00 2001
+From: Creative <145705414+BeingCreativeMN@users.noreply.github.com>
+Date: Thu, 19 Jun 2025 19:59:10 +0800
+Subject: [PATCH 6/6] Update ghost.json
+
+---
+ ghost/i18n/locales/mn/ghost.json | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/ghost/i18n/locales/mn/ghost.json b/ghost/i18n/locales/mn/ghost.json
+index 525607ce734..cdf7ce3b7e8 100644
+--- a/ghost/i18n/locales/mn/ghost.json
++++ b/ghost/i18n/locales/mn/ghost.json
+@@ -14,7 +14,7 @@
+     "Confirm your subscription to {siteTitle}": "{siteTitle} захиалгаа баталгаажуулах",
+     "Device:": "Төхөөрөмж:",
+     "Email": "Имэйл",
+-    "For security verification, enter the code below to sign in to {siteTitle}:": "Аюулгүй байдлын үүднээсдоорх кодыг оруулан {siteTitle}-д нэвтэрнэ үү:",
++    "For security verification, enter the code below to sign in to {siteTitle}:": "Аюулгүй байдлын үүднээс доорх кодыг оруулан {siteTitle}-д нэвтэрнэ үү:",
+     "For your security, the link will expire in 24 hours time.": "Нууцлалын шалтгаанаар энэхүү холбоос 24 цагийн дараа хүчингүй болно.",
+     "free": "үнэгүй",
+     "Here's your code to login to {siteTitle}": "{siteTitle}-д нэвтрэх код:",
+@@ -33,7 +33,7 @@
+     "New reply to your comment on {siteTitle}": "Таны сэтгэгдэлд шинэ хариу нэмэгдлээ",
+     "paid": "төлбөртэй",
+     "Please confirm your email address with this link:": "Та өөрийн имэйл хаягаа дараах холбоосоор баталгаажуулна уу:",
+-    "Secure sign in link for {siteTitle}": "{siteTitle}-д нэвтрэх нууцлал бүхий холбоос",
++    "Secure sign in link for {siteTitle}": "{siteTitle}-д нэвтрэх холбоос",
+     "See you soon!": "Биднийг дэмждэг баярлалаа!",
+     "Sent to {email}": "{email} хаяг руу илгээлээ",
+     "Sign in": "Нэвтрэх",
