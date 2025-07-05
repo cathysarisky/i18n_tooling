@@ -82,12 +82,40 @@ node index.js analyze 1234 -d
 node index.js post 1234 ai_validations/1234.json
 ```
 
+### Clean Pending Reviews
+
+```bash
+# Delete empty pending reviews for PR #1234
+# ⚠️  WARNING: This will delete ALL pending comments for the PR
+node index.js clean-pending 1234
+```
+
+**Note**: The `clean-pending` command deletes the entire pending review, including any comments that were already posted. Use this only when you want to start fresh with a new review.
+
+### Complete Review Workflow
+
+```bash
+# Run the complete workflow: analyze + post comments
+node index.js review 1234
+```
+
+This command combines the analyze and post steps into a single workflow.
+
 ## Workflow
 
+### Basic Workflow
 1. **Analyze PR**: Run the analysis tool on a specific PR
 2. **Review Report**: Check the generated JSON report in `ai_validations/`
 3. **Edit if needed**: Modify the report file if you want to change comments
 4. **Post Line Comments**: Use the post command to submit line-specific comments to the PR
+
+### Quick Workflow
+1. **Review**: Use the `review` command to analyze and post comments in one step
+2. **Edit in GitHub**: The comments are posted as draft reviews that you can edit before submitting
+
+### Troubleshooting Workflow
+1. **Clean Pending**: If you get "one pending review per pull request" errors, use `clean-pending` to remove existing reviews
+2. **Re-run**: Then run `review` or `post` again
 
 ## Output Structure
 
@@ -218,6 +246,10 @@ You are an AI assistant analyzing i18n (internationalization) changes in a Ghost
 3. **OpenAI API Errors**: Check your API key and billing status.
 
 4. **Permission Errors**: Ensure your GitHub token has `repo` permissions.
+
+5. **"One pending review per pull request" error**: This happens when there's already a pending review. Use `clean-pending` to remove it, then re-run your command.
+
+6. **Comments posted to wrong lines**: The tool uses diff positions for comment placement. If comments appear on the wrong lines, check that the diff positions in the report are correct.
 
 ### Debug Mode
 

@@ -14,44 +14,30 @@ export async function postComments(prNumber, reportFile) {
   const report = JSON.parse(reportContent);
   
   console.log(chalk.green(`✅ Loaded report for PR #${report.prNumber}`));
-  console.log(chalk.cyan(`📊 Found ${report.summary.totalIssues} issues across ${report.summary.filesWithIssues} files`));
+  console.log(chalk.cyan(`📊 Found ${report.summary.totalComments} comments across ${report.summary.filesWithComments} files`));
 
   // Collect all comments from all files
   const allComments = [];
-  const overallComments = [];
   
   for (const file of report.files) {
-    if (file.issues.length > 0 || file.suggestions.length > 0 || file.overall) {
-      // Process issues
-      for (const issue of file.issues) {
-        if (typeof issue.diffPosition === 'number' && issue.diffPosition > 0) {
+    if (file.comments && file.comments.length > 0) {
+      // Process comments
+      for (const comment of file.comments) {
+        if (typeof comment.diffPosition === 'number' && comment.diffPosition > 0) {
           allComments.push({
             path: file.filename,
-            position: issue.diffPosition,
-            body: formatLineComment(issue, 'issue')
+            position: comment.diffPosition + 1, // Add +1 offset to fix line positioning
+            body: formatLineComment(comment, 'comment')
           });
         }
-      }
-
-      // Process suggestions
-      for (const suggestion of file.suggestions) {
-        if (typeof suggestion.diffPosition === 'number' && suggestion.diffPosition > 0) {
-          allComments.push({
-            path: file.filename,
-            position: suggestion.diffPosition,
-            body: formatLineComment(suggestion, 'suggestion')
-          });
-        }
-      }
-
-      // Collect overall comments
-      if (file.overall && file.overall.trim()) {
-        overallComments.push(`${file.filename}: ${file.overall}`);
       }
     }
   }
 
-  console.log(chalk.blue(`📝 Preparing ${allComments.length} line comments for ${report.files.filter(f => f.issues.length > 0 || f.suggestions.length > 0 || f.overall).length} files...`));
+  // Use the consolidated overall comment from the report
+  const overallComment = report.overallComment;
+
+  console.log(chalk.blue(`📝 Preparing ${allComments.length} line comments for ${report.files.filter(f => f.comments && f.comments.length > 0).length} files...`));
 
   if (allComments.length === 0 && overallComments.length === 0) {
     console.log(chalk.yellow('⚠️  No comments to post'));
@@ -86,11 +72,11 @@ export async function postComments(prNumber, reportFile) {
         });
       }
 
-      // Update review body if there are overall comments
-      if (overallComments.length > 0) {
+      // Update review body if there is an overall comment
+      if (overallComment) {
         const newBody = pendingReview.body 
-          ? `${pendingReview.body}\n\n---\n${formatOverallComments(overallComments)}`
-          : formatOverallComments(overallComments);
+          ? `${pendingReview.body}\n\n---\n${formatOverallComment(overallComment)}`
+          : formatOverallComment(overallComment);
           
         await octokit.pulls.updateReview({
           owner: process.env.GITHUB_OWNER,
@@ -105,9 +91,7 @@ export async function postComments(prNumber, reportFile) {
       
     } else {
       // Create new draft review with all comments
-      const reviewBody = overallComments.length > 0 
-        ? formatOverallComments(overallComments)
-        : undefined;
+      const reviewBody = overallComment ? formatOverallComment(overallComment) : undefined;
 
       await octokit.pulls.createReview({
         owner: process.env.GITHUB_OWNER,
@@ -130,20 +114,17 @@ export async function postComments(prNumber, reportFile) {
 }
 
 function formatLineComment(item, type) {
-  const icon = type === 'issue' ? getIssueIcon(item.type) : '💡';
+  const icon = getIssueIcon(item.type);
   
-  let body = `My AI helper says: ${icon} ${item.message}\n\n`;
+  let body = `${item.message}\n\n`;
   
   return body;
 }
 
-function formatOverallComments(overallComments) {
-  const formattedComments = overallComments.map(comment => `📋 ${comment}`).join('\n\n');
-  return `${formattedComments}\n\n---\n*Drafted with Ghost i18n tooling*`;
-}
+
 
 function formatOverallComment(overall) {
-  return `📋 ${overall}\n\n---\n*Drafted with Ghost i18n tooling*`;
+  return `📋 ${overall}\n\n---\n*Drafted with my new i18n tooling - feedback welcome*`;
 }
 
 function getIssueIcon(type) {
