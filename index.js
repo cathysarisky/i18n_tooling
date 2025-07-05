@@ -4,7 +4,7 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import dotenv from 'dotenv';
 import { analyzePR } from './src/analyzer.js';
-import { postComments } from './src/github.js';
+import { postComments, deleteEmptyPendingReview } from './src/github.js';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -66,6 +66,52 @@ program
       
       console.log(chalk.green('✅ Comments posted successfully!'));
       
+    } catch (error) {
+      console.error(chalk.red('❌ Error:'), error.message);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('review <pr-number>')
+  .description('Analyze a PR and post comments in one step')
+  .option('-d, --dry-run', 'Run analysis without posting comments')
+  .action(async (prNumber, options) => {
+    try {
+      console.log(chalk.blue(`🔍 Starting full review process for PR #${prNumber}...`));
+      
+      // Step 1: Analyze
+      console.log(chalk.cyan('\n📋 Step 1: Analyzing PR...'));
+      const report = await analyzePR(prNumber, options);
+      
+      if (!report) {
+        console.log(chalk.red('❌ Analysis failed or no i18n files found.'));
+        return;
+      }
+      
+      // Step 2: Post comments (unless dry run)
+      if (options.dryRun) {
+        console.log(chalk.yellow('\n📝 Dry run mode - skipping comment posting'));
+        console.log(chalk.blue(`📊 Report saved to: ai_validations/${prNumber}.json`));
+      } else {
+        console.log(chalk.cyan('\n📤 Step 2: Posting comments...'));
+        const reportFile = `ai_validations/${prNumber}.json`;
+        await postComments(prNumber, reportFile);
+        console.log(chalk.green('\n✅ Full review process completed!'));
+      }
+      
+    } catch (error) {
+      console.error(chalk.red('❌ Error:'), error.message);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('clean-pending <pr-number>')
+  .description('Delete an empty pending review for a PR (if it exists)')
+  .action(async (prNumber) => {
+    try {
+      await deleteEmptyPendingReview(prNumber);
     } catch (error) {
       console.error(chalk.red('❌ Error:'), error.message);
       process.exit(1);

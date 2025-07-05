@@ -119,7 +119,8 @@ async function analyzeFile(file, pr) {
       return null;
     }
 
-    console.log(chalk.cyan(`    📝 Found ${changedLines.length} changed lines`));
+    const addedLines = changedLines.filter(line => line.type === 'added');
+    console.log(chalk.cyan(`    📝 Found ${addedLines.length} added lines to analyze`));
 
     // Analyze with AI
     const aiAnalysis = await analyzeWithAI(file.filename, changedLines, pr.title);
@@ -132,7 +133,7 @@ async function analyzeFile(file, pr) {
       changedLines: changedLines,
       issues: aiAnalysis.issues || [],
       suggestions: aiAnalysis.suggestions || [],
-      aiSummary: aiAnalysis.summary || '',
+      overall: aiAnalysis.overall || '',
     };
 
   } catch (error) {
@@ -142,6 +143,7 @@ async function analyzeFile(file, pr) {
       error: error.message,
       issues: [],
       suggestions: [],
+      overall: '',
     };
   }
 }
@@ -149,97 +151,132 @@ async function analyzeFile(file, pr) {
 function extractChangedLines(diff) {
   const lines = diff.split('\n');
   const changedLines = [];
-  let currentLineNumber = 0;
+  let fileLineNumber = 0;
   let addedLineNumber = 0;
   let removedLineNumber = 0;
-  
+  let globalDiffPosition = 0; // global position across all hunks
+  let addedCount = 0;
+  let deletedCount = 0;
+
+  console.log(chalk.gray(`    🔍 Analyzing diff with ${lines.length} lines...`));
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    
     if (line.startsWith('@@')) {
-      // Parse the @@ line to get line numbers
       const match = line.match(/@@ -(\d+),?(\d+)? \+(\d+),?(\d+)? @@/);
       if (match) {
         removedLineNumber = parseInt(match[1]);
         addedLineNumber = parseInt(match[3]);
-        currentLineNumber = addedLineNumber;
+        fileLineNumber = addedLineNumber;
+        // DO NOT increment globalDiffPosition for hunk headers
+        console.log(chalk.gray(`    📍 Hunk: -${removedLineNumber} +${addedLineNumber} (fileLineNumber: ${fileLineNumber})`));
       }
-    } else if (line.startsWith('+') && !line.startsWith('+++')) {
-      // Added line
-      changedLines.push({
-        type: 'added',
-        content: line.substring(1),
-        lineNumber: currentLineNumber,
-        position: currentLineNumber
-      });
-      currentLineNumber++;
-    } else if (line.startsWith('-') && !line.startsWith('---')) {
-      // Removed line
-      changedLines.push({
-        type: 'removed',
-        content: line.substring(1),
-        lineNumber: removedLineNumber,
-        position: removedLineNumber
-      });
-      removedLineNumber++;
-    } else if (!line.startsWith('+++') && !line.startsWith('---')) {
-      // Context line (unchanged)
-      currentLineNumber++;
-      removedLineNumber++;
+    } else {
+      globalDiffPosition++;
+      if (line.startsWith('+') && !line.startsWith('+++')) {
+        // Only track added lines (translations that were added)
+        const addedLine = {
+          type: 'added',
+          content: line.substring(1),
+          fileLineNumber: fileLineNumber,
+          diffPosition: globalDiffPosition
+        };
+        changedLines.push(addedLine);
+        console.log(chalk.gray(`    ➕ Added line ${addedCount + 1}: diffPosition=${globalDiffPosition}, fileLine=${fileLineNumber}, content="${line.substring(1).substring(0, 50)}..."`));
+        fileLineNumber++;
+        addedCount++;
+      } else if (line.startsWith('-') && !line.startsWith('---')) {
+        // Track deleted lines for logging but don't include them in analysis
+        deletedCount++;
+        removedLineNumber++;
+        console.log(chalk.gray(`    ➖ Deleted line: diffPosition=${globalDiffPosition}, content="${line.substring(1).substring(0, 50)}..."`));
+      } else if (!line.startsWith('+++') && !line.startsWith('---')) {
+        // Context lines (unchanged lines)
+        fileLineNumber++;
+      }
     }
   }
   
+  console.log(chalk.gray(`    📊 Found ${addedCount} added lines and ${deletedCount} deleted lines (only analyzing added lines)`));
   return changedLines;
 }
 
 async function analyzeWithAI(filename, changedLines, prTitle) {
+  // Only analyze added lines (translations that were added)
+  const addedLines = changedLines.filter(line => line.type === 'added');
+  
+  if (addedLines.length === 0) {
+    return {
+      issues: [],
+      suggestions: [],
+      overall: "No added translations to analyze"
+    };
+  }
+
   const directions = {
     role: 'developer',
     content: `You are an AI assistant analyzing i18n (internationalization) changes in a Ghost 
     (blogging and newsletter publishing platform) repository.
 We are validating translations from English to the given language.
 
-Please analyze these i18n changes and provide:
-1. Any potential issues or concerns
-2. Suggestions for improvements
-3. A brief summary of the changes
+Please validate these i18n additions or changes.
 
 Focus specifically on:
-- **Translation Quality**: Are the translations accurate and appropriate?
-- **Cultural Sensitivity**: Are the translations culturally appropriate?
-- **Context**: Do the translations make sense in their intended context?
 - Is there any attempt to deface? 
 - Are there any typos or grammar errors?
+- Are the translations accurate and appropriate?
+
+These translations are generally produced by a human who is a native speaker of the target language.
+Word any feedback in a polite way that respects their authority as the native speaker.  Ask questions 
+about things that might be errors.  "Would ___ be better?"  "Is the spelling of ___ correct?" 
+
+Match the punctuation of the original English.  Translators should not add or remove punctuation.
+
+Do not nitpick wording too much.  Only leave a comment or suggestion if it looks like an error on the part of the translator.
+
+Raise any number of issues.
+
+Make a maximum of two suggestions.  Do not make fluffy suggestions or offer compliments.
+
+Write an "overall" section only if there is a general pattern affecting multiple lines, like inconsistent usage of formal vs informal, or inconsistent choices
+of translation style.  (These sorts of comments could also go on a single line, if there is only one problem.)
 
 Format your response as JSON with the following structure:
 {
   "issues": [
     {
       "type": "error|warning|info",
-      "message": "Description of the issue",
-      "line": "line number or content",
-      "position": line_number,
-      "suggestion": "How to fix it"
+      "diffPosition": diffPosition,
+      "message": "Why it might be wrong, and how to fix it"
     }
   ],
   "suggestions": [
     {
       "type": "improvement",
-      "message": "Description of the suggestion",
-      "line": "line number or content",
-      "position": line_number
+      "message": "Why it might be wrong, and how to fix it",
+      "diffPosition": diffPosition
     }
   ],
-  "summary": "Brief summary of the i18n changes and overall assessment"
-}`
+  "overall": "Any overall comments that don't belong on one line. Do not duplicate the issues or suggestions. Do not summarize. 
+  If the issue is already covered in the issues or suggestions, do not repeat it.  An 'overall' section is optional.
+  You can also say LGTM, no issues."
+}
+
+CRITICAL: For each issue or suggestion, you MUST use the exact diffPosition value that corresponds to the specific line containing the translation you are commenting on. 
+The valid diffPosition values are: ${addedLines.map(line => line.diffPosition).join(', ')}
+
+IMPORTANT: Look at the translation content in each line and use the diffPosition that matches the line containing the specific translation you want to comment on.
+Do not make up or guess diffPositions. Do not reference line content or file line number for comment placement.
+Only comment on ADDED lines (translations that were added). Do not comment on deleted lines.
+`
   };
 
   const content = `PR Title: ${prTitle}
 File: ${filename}
 
-Changed Lines:
-${changedLines.map((line, index) => 
-  `${index + 1}. [${line.type.toUpperCase()}] Line ${line.position}: ${line.content}`
+Added Lines (translations to analyze):
+${addedLines.map((line, index) => 
+  `${index + 1}. [ADDED] diffPosition ${line.diffPosition}: ${line.content}`
 ).join('\n')}`;
 
   try {
@@ -257,18 +294,43 @@ ${changedLines.map((line, index) =>
       return {
         issues: [],
         suggestions: [],
-        summary: "AI analysis failed - no valid response"
+        overall: "AI analysis failed - no valid response"
       };
     }
     
-    return JSON.parse(response.choices[0].message.content);
+    const aiResponse = JSON.parse(response.choices[0].message.content);
+    
+    // Validate that all diffPosition values are valid (only added lines)
+    const validPositions = addedLines.map(line => line.diffPosition);
+    
+    if (aiResponse.issues) {
+      aiResponse.issues = aiResponse.issues.filter(issue => {
+        if (!validPositions.includes(issue.diffPosition)) {
+          console.log(chalk.yellow(`    ⚠️  Skipping issue with invalid diffPosition ${issue.diffPosition} (not an added line)`));
+          return false;
+        }
+        return true;
+      });
+    }
+    
+    if (aiResponse.suggestions) {
+      aiResponse.suggestions = aiResponse.suggestions.filter(suggestion => {
+        if (!validPositions.includes(suggestion.diffPosition)) {
+          console.log(chalk.yellow(`    ⚠️  Skipping suggestion with invalid diffPosition ${suggestion.diffPosition} (not an added line)`));
+          return false;
+        }
+        return true;
+      });
+    }
+    
+    return aiResponse;
 
   } catch (error) {
     console.log(chalk.red(`    ❌ AI analysis failed for ${filename}:`), error.message);
     return {
       issues: [],
       suggestions: [],
-      summary: "AI analysis failed"
+      overall: "AI analysis failed"
     };
   }
 } 
