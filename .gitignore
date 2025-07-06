@@ -17,6 +17,9 @@ yarn-error.log*
 # AI validation outputs
 ai_validations/
 
+# Cache directory
+cache/
+
 # Logs
 logs
 *.log

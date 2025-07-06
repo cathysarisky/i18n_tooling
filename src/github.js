@@ -16,19 +16,40 @@ export async function postComments(prNumber, reportFile) {
   console.log(chalk.green(`✅ Loaded report for PR #${report.prNumber}`));
   console.log(chalk.cyan(`📊 Found ${report.summary.totalComments} comments across ${report.summary.filesWithComments} files`));
 
+  // Fetch PR to get the latest head SHA (needed for line/side comments)
+  const { data: pr } = await octokit.pulls.get({
+    owner: process.env.GITHUB_OWNER,
+    repo: process.env.GITHUB_REPO,
+    pull_number: prNumber,
+  });
+  const headSha = pr.head.sha;
+
   // Collect all comments from all files
   const allComments = [];
   
   for (const file of report.files) {
     if (file.comments && file.comments.length > 0) {
-      // Process comments
+      // Build a lookup to map diffPosition -> fileLineNumber derived during analysis
+      const posToLine = new Map();
+      if (Array.isArray(file.changedLines)) {
+        for (const ln of file.changedLines) {
+          if (typeof ln.diffPosition === 'number' && typeof ln.fileLineNumber === 'number') {
+            posToLine.set(ln.diffPosition, ln.fileLineNumber);
+          }
+        }
+      }
+
       for (const comment of file.comments) {
-        if (typeof comment.diffPosition === 'number' && comment.diffPosition > 0) {
+        const lineNumber = posToLine.get(comment.diffPosition);
+        if (typeof lineNumber === 'number' && lineNumber > 0) {
           allComments.push({
             path: file.filename,
-            position: comment.diffPosition, // Use the correct relative line number
+            line: lineNumber,
+            side: 'RIGHT', // We only comment on added lines in the new file
             body: formatLineComment(comment, 'comment')
           });
+        } else {
+          console.log(chalk.yellow(`⚠️  Could not map diffPosition ${comment.diffPosition} to a line number for ${file.filename}`));
         }
       }
     }
@@ -39,7 +60,7 @@ export async function postComments(prNumber, reportFile) {
 
   console.log(chalk.blue(`📝 Preparing ${allComments.length} line comments for ${report.files.filter(f => f.comments && f.comments.length > 0).length} files...`));
 
-  if (allComments.length === 0 && overallComments.length === 0) {
+  if (allComments.length === 0 && (!overallComment || overallComment.length === 0)) {
     console.log(chalk.yellow('⚠️  No comments to post'));
     return;
   }
@@ -68,7 +89,8 @@ export async function postComments(prNumber, reportFile) {
           body: comment.body,
           commit_id: pendingReview.commit_id,
           path: comment.path,
-          position: comment.position
+          line: comment.line,
+          side: comment.side
         });
       }
 
@@ -97,6 +119,7 @@ export async function postComments(prNumber, reportFile) {
         owner: process.env.GITHUB_OWNER,
         repo: process.env.GITHUB_REPO,
         pull_number: prNumber,
+        commit_id: headSha,
         comments: allComments,
         body: reviewBody,
         // No event specified = creates a draft review

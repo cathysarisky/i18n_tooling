@@ -44,31 +44,61 @@ function parseDiffLine(line) {
 export function extractAddedLinesWithRelativeNumbers(diffContent) {
     const lines = diffContent.split('\n');
     const addedLines = [];
-    let relativeLine = 0;
+
+    let relativeLine = 0;      // Position within the patch used previously
+    let newLineNumber = 0;     // Line number in the NEW file (what we need for line/side)
 
     for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
+        const rawLine = lines[i];
 
-        // Skip file headers and metadata
-        if (
-            line.startsWith('---') || line.startsWith('+++') ||
-            line.startsWith('index ') || line.startsWith('diff --git') ||
-            line.startsWith('From ') || line.startsWith('Date: ') ||
-            line.startsWith('Subject: ') ||
-            line.startsWith('@@')
-        ) {
+        // Bump the patch position counter for EVERY physical line in the diff
+        // (metadata, hunk headers, context, deleted, added, etc.)
+        relativeLine++;
+
+        // Handle hunk header to reset newLineNumber
+        if (rawLine.startsWith('@@')) {
+            // Parse the new-file start line from the hunk header: "@@ -<old> +<new>[,<count>] @@"
+            const match = rawLine.match(/@@ -\d+(?:,\d+)? \+(\d+)(?:,\d+)? @@/);
+            if (match) {
+                // newLineNumber is the line BEFORE the first line in the hunk, so subtract 1.
+                newLineNumber = parseInt(match[1], 10) - 1;
+            }
+            // Hunk headers have no effect on newLine counting beyond resetting, continue.
             continue;
         }
 
-        // Increment relativeLine for every line in the patch (except metadata and hunk headers)
-        relativeLine++;
-        if (line.startsWith('+')) {
-            addedLines.push({
-                relativeLine,
-                content: line.substring(1),
-                newLine: null // can be filled if needed
-            });
+        // Skip other diff metadata for newLine counting but we've already counted them in relativeLine.
+        if (
+            rawLine.startsWith('diff --git') ||
+            rawLine.startsWith('index ') ||
+            rawLine.startsWith('---') ||
+            rawLine.startsWith('+++') ||
+            rawLine.startsWith('From ') ||
+            rawLine.startsWith('Date: ') ||
+            rawLine.startsWith('Subject: ')
+        ) {
+            // These lines don't correspond to either old or new file content.
+            continue;
         }
+
+        // Determine how the line affects the NEW file line counter
+        if (rawLine.startsWith('+') && !rawLine.startsWith('+++')) {
+            // Added line exists in the new file → increment newLineNumber first
+            newLineNumber++;
+
+            addedLines.push({
+                relativeLine,                 // For backward-compat / debug
+                newLine: newLineNumber,        // Line number in the new file
+                content: rawLine.substring(1)  // Strip leading '+'
+            });
+        } else if (rawLine.startsWith(' ') || rawLine === '') {
+            // Context (unchanged) line – exists in both old and new files
+            newLineNumber++;
+        } else if (rawLine.startsWith('-') && !rawLine.startsWith('---')) {
+            // Deleted line – exists only in the old file; do NOT bump newLineNumber
+            // No action required.
+        }
+        // Any other kind of line doesn't affect newLineNumber further.
     }
 
     return addedLines;

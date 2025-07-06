@@ -9,6 +9,7 @@ A Node.js tool for analyzing Ghost PR changes to i18n locale files and validatin
 - 📊 **Report Generation**: Creates detailed JSON reports of findings
 - 💬 **GitHub Integration**: Posts analysis results as line-specific PR comments
 - 🎯 **i18n Focus**: Specializes in translation quality, consistency, and best practices
+- ⚡ **Performance Optimized**: Single AI call per PR + filesystem caching for context.json (24 hours)
 
 ## File Filtering
 
@@ -214,6 +215,24 @@ When analyzing a PR with mixed file types:
 📊 Analysis complete! Found 4 potential issues in 2 i18n files
 ```
 
+## Performance Optimizations
+
+### Context.json Caching
+
+The tool caches the `context.json` file to the filesystem for 24 hours to avoid redundant GitHub API calls. This significantly improves performance when analyzing multiple files in a single PR or running multiple analyses in a day.
+
+- **Cache Duration**: 24 hours
+- **Cache Location**: `i18n_tooling/cache/context.json`
+- **Cache Expiry**: Based on file modification time
+- **Logging**: Shows when cache is used vs. when fetching from GitHub
+
+### API Call Optimization
+
+- **Single AI Call**: All files are analyzed together in one OpenAI API call instead of one call per file
+- **Context Sharing**: The AI can see patterns across all files and provide better overall analysis
+- **Context.json Caching**: Fetched only once per PR analysis, regardless of the number of files
+- **Reduced API Usage**: Significantly reduces both GitHub and OpenAI API calls
+
 ## Customization
 
 ### File Pattern
@@ -254,6 +273,14 @@ You are an AI assistant analyzing i18n (internationalization) changes in a Ghost
 ### Debug Mode
 
 Add `DEBUG=true` to your `.env` file for more verbose logging.
+
+### Cache Management
+
+The context.json cache automatically expires after 24 hours. If you need to force a refresh of the cache (e.g., if context.json has been updated), delete the cache file:
+
+```bash
+rm i18n_tooling/cache/context.json
+```
 
 ## Contributing
 
