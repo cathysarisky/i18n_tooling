@@ -112,7 +112,13 @@ export async function analyzePR(prNumber, options = {}) {
   }
 
   // Analyze all files together with a single AI call
-  const aiAnalysis = await analyzeAllFilesWithAI(allFileChanges, pr.title, pr, contextContent);
+  const aiAnalysis = await analyzeAllFilesWithAI(allFileChanges, pr.title, pr, contextContent, options.debug || process.env.DEBUG === 'true');
+
+  // Generate the overall comment for the entire PR (not per file)
+  let overallComment = "My AI helper 🤖 left you a few comments.  I always believe the human over the AI, so feel free to disregard them after you take a careful look! \n\n Leave me a comment when you're satisfied with everything, please. :) ";
+  if (aiAnalysis.overall) {
+    overallComment += `\n\n🤖 AI: ${aiAnalysis.overall}`;
+  }
 
   // Process AI analysis results back into file-specific format
   for (const fileChange of allFileChanges) {
@@ -120,12 +126,6 @@ export async function analyzePR(prNumber, options = {}) {
       comment.filename === fileChange.filename
     );
     
-    let overallComment = "My AI helper left you a few comments.  I always believe the human over the AI, so feel free to disregard them!  Leave me a comment when you're satisfied with everything, please. :) ";
-    if (aiAnalysis.overall) {
-      overallComment += `\n\n
-      My AI helper says: ${aiAnalysis.overall}`;
-    }
-
     analysisResults.push({
       filename: fileChange.filename,
       status: fileChange.status,
@@ -133,7 +133,6 @@ export async function analyzePR(prNumber, options = {}) {
       deletions: fileChange.deletions,
       changedLines: fileChange.changedLines,
       comments: fileComments,
-      overall: overallComment || '',
     });
   }
 
@@ -145,7 +144,7 @@ export async function analyzePR(prNumber, options = {}) {
     analyzedAt: new Date().toISOString(),
     files: analysisResults,
     skippedFiles: nonI18nFiles.map(f => ({ filename: f.filename, status: f.status })),
-    overallComment: aiAnalysis.overall || "My AI helper left you a few comments. I always believe the human over the AI, so feel free to disregard them! Leave me a comment when you're satisfied with everything, please. :)",
+    overallComment: overallComment,
     summary: {
       totalFiles: files.length,
       i18nFiles: relevantFiles.length,
@@ -277,7 +276,7 @@ async function getCurrentFileContent(filename, pr) {
   }
 }
 
-async function analyzeAllFilesWithAI(allFileChanges, prTitle, pr, contextContent) {
+async function analyzeAllFilesWithAI(allFileChanges, prTitle, pr, contextContent, debug = false) {
   // Filter out files with no added lines
   const filesWithChanges = allFileChanges.filter(file => {
     const addedLines = file.changedLines.filter(line => line.type === 'added');
@@ -303,7 +302,7 @@ async function analyzeAllFilesWithAI(allFileChanges, prTitle, pr, contextContent
     role: 'developer',
     content: `You are an AI assistant analyzing i18n (internationalization) changes in a Ghost 
     (blogging and newsletter publishing platform) repository.
-We are validating translations from English to the given language.
+We are validating translations from English to the given language.  Do not critique or correct the English, only the translations.
 
 Please validate these i18n additions or changes across multiple files.
 
@@ -312,36 +311,41 @@ Focus specifically on:
 - Are there any typos or grammar errors?
 - Are the translations accurate and appropriate?
 
-These translations are generally produced by a human who is a native speaker of the target language.
+These translations were produced by a human who is a native speaker of the target language.
 Word any feedback in a polite way that respects their authority as the native speaker.  Ask questions 
-about things that might be errors.  "Would ___ be better?"  "Is the spelling of ___ correct?" 
+about things that might be errors.  "Is the spelling of ___ correct?"  Say "I think" or "I suspect".
+Be polite and deferential to the translator's expertise, 
+but tell them if you suspect they've made an error.
 
-Match the punctuation of the original English.  Translators should not add or remove punctuation. You don't need
-to phrase that as a question.
+Match the ending punctuation of the original English.  Translators should not add or remove punctuation. You don't need
+to phrase that as a question.  
+
+Say "please" occasionally.
 
 Do not nitpick wording too much.  Only leave a comment or suggestion if it looks like an error on the part of the translator.
 
 Raise any number of issues.
 
-Do not make fluffy suggestions or offer compliments.  Only make suggestions if they are specific and actionable.
+Only make suggestions if they are specific and actionable.
 
-Write an "overall" section only if there is a general pattern affecting multiple lines, like inconsistent usage of formal vs informal, or inconsistent choices
-of translation style.  (These sorts of comments could also go on a single line, if there is only one problem.)  Do not write 
-a summary. Do not repeat what's already in issues or suggestions.
+### Write an overall comment:
+- Overall translation quality and consistency
+- Any patterns or trends across multiple files
+- General tone and style consistency
+- Any systemic issues that affect multiple translations
+- Do NOT repeat what's already listed in the comments. 
 
-Format your response as JSON with the following structure:
+### Format your response as JSON with the following structure:
 {
   "comments": [
     {
       "type": "error|warning|info|suggestion",
       "filename": "filename.json",
       "diffPosition": diffPosition,
-      "message": "My AI helper says: [Your feedback here - be specific and actionable]"
+      "message": "[Your feedback here - be specific and actionable - please write in English]"
     }
   ],
-  "overall": "Any overall comments that don't belong on one line. Do not duplicate the comments. Do not summarize. 
-  If the issue is already covered in the comments, do not repeat it. An 'overall' section is optional.
-  You can also say LGTM, no issues."
+  "overall": "[An 'overall' section is optional.  If you have any overall comments, please write them here.  Finish your comment with 'Thank you!' in the translator's own language.]"  
 }
 
 CRITICAL: For each issue or suggestion, you MUST use the exact diffPosition value that corresponds to the specific line containing the translation you are commenting on. 
@@ -351,37 +355,23 @@ The valid diffPosition values for each file are:
 ${validPositions.map(pos => `${pos.filename}: ${pos.diffPosition}`).join(', ')}
 
 IMPORTANT: Look at the translation content in each line and use the diffPosition that matches the line containing the specific translation you want to comment on.
-Do not make up or guess diffPositions. Do not reference line content or file line number for comment placement.
-Only comment on ADDED lines (translations that were added). Do not comment on deleted lines.
 
-Do not include the specific line number or diffPosition in the message field. 
+### Directions provided to the translator:
 
-Directions provided to the translator:
-Notes & tips
-🔖 For help getting started, see https://forum.ghost.org/t/help-translate-ghost-beta/37461 - the original directions were only for portal, but can be generalized to any language file.
+- Formality: Ghost's brand has a friendly and fairly informal tone. If your language has both formal and informal form, choose one or the other and use it consistently. Most languages are using the informal version, but if the informal version might be considered rude, then choose the formal.
+- All kinds of people use Ghost. When possible, prefer gender-neutral language.
+- Translations should work for a variety of Ghost sites. Choose translations that will make sense for both personal blogs/newsletters and news publications.
 
-🤖 NO AI translations, please. Native/very fluent speakers only.
+### Common issues to avoid & other notes:
 
-✉ Read your email! Please make sure you have your Github notifications sent somewhere you will see them. Most PRs need at least one round of adjustment before merging.
-
-🆕 New Github users are welcome! When you submit your PR, please make sure that the "files changed" tab shows only the changes you intended to make. If you have questions, please leave a comment and I'll try to help get you sorted out.
-
-👋 Formality: Ghost's brand has a friendly and fairly informal tone. If your language has both formal and informal form, choose one or the other and use it consistently. Most languages are using the informal version, but if the informal version might be considered rude, then choose the formal.
-
-🤗 All kinds of people use Ghost. When possible, prefer gender-neutral language.
-
-👍 Translations should work for a variety of Ghost sites. Choose translations that will make sense for both personal blogs/newsletters and news publications.
-
-👉 Please @ cathysarisky if you add a language PR. Thanks!
-
-Common issues to avoid & other notes:
-Please give your PR a descriptive title that includes the language you are working on.
-Check before starting that there isn't another PR for the same language. If there is, please review it rather than duplicating work.
 Consult the context.json file if you aren't sure how a string will be used.
-We use "Jamie Larson" for a placeholder in any field that needs a name. Please do not transliterate. Please do not replace with "Name". Instead, choose a name that will be recognized as a name in your language. Choose something uncontroversial and common. If possible, choose a non-gendered name.
-Do not translate variables (inside {}). Do not add variables. 
-Watch out for "You are receiving this because you are a %%{status}%% subscriber to {site}.'", which takes the "free", "trialing", "paid", and "complimentary" strings in the %%{status}%% field. These strings need to work together.
-If you are changing existing translations, please leave an explanation of why.
+
+In English, we use "Jamie Larson" for a placeholder in any field that needs a name. Please do not transliterate. Please do not replace with "Name". Instead, replace Jamie Larson with a name that will be recognized as a name in your language. Choose something uncontroversial and common. If possible, choose a non-gendered name.
+
+Do not translate variables (inside {}). Do not add variables. If a translator has omitted a variable or made an error in the variable name, please note that in your comment.
+
+Watch out for "You are receiving this because you are a %%{status}%% subscriber to {site}.'", which takes the "free", "trialing", "paid", and "complimentary" strings in the %%{status}%% field. These strings need to produce good grammar when substituted.
+
 `
   };
 
@@ -406,9 +396,21 @@ ${contextContent ? contextContent : 'Not available'}
 Files and changes in this PR:
 ${filesContent}`;
 
+  if (debug) {
+    console.log(chalk.blue('\n🤖 AI Request Details:'));
+    console.log(chalk.gray('='.repeat(80)));
+    console.log(chalk.cyan('📋 System Prompt:'));
+    console.log(chalk.gray(directions.content));
+    console.log(chalk.gray('='.repeat(80)));
+    console.log(chalk.cyan('📄 User Content:'));
+    console.log(chalk.gray(content));
+    console.log(chalk.gray('='.repeat(80)));
+    console.log(chalk.blue(`📊 Sending request to OpenAI (${content.length} characters)...`));
+  }
+
   try {
     const response = await openai.beta.chat.completions.parse({
-      model: "gpt-4.1",
+      model: "o4-mini",
       messages: [
         directions,
         { role: 'assistant', content: content }
@@ -426,6 +428,12 @@ ${filesContent}`;
     
     const aiResponse = JSON.parse(response.choices[0].message.content);
     
+    if (debug) {
+      console.log(chalk.green('\n✅ AI Response:'));
+      console.log(chalk.gray('='.repeat(80)));
+      console.log(chalk.gray(JSON.stringify(aiResponse, null, 2)));
+      console.log(chalk.gray('='.repeat(80)));
+    }
 
     
     if (aiResponse.comments) {
@@ -450,63 +458,3 @@ ${filesContent}`;
     };
   }
 }
-
-async function generateOverallComment(allFileChanges, prTitle, pr, contextContent) {
-  if (allFileChanges.length === 0) {
-    return null;
-  }
-
-  const directions = {
-    role: 'developer',
-    content: `You are an AI assistant analyzing i18n (internationalization) changes across multiple files in a Ghost (blogging and newsletter publishing platform) repository.
-
-Please provide ONE overall assessment of the translation quality across all files in this PR.
-
-Focus on:
-- Overall translation quality and consistency
-- Any patterns or trends across multiple files
-- General tone and style consistency
-- Any systemic issues that affect multiple translations
-
-Do NOT provide line-specific comments - those are handled separately. Focus only on the big picture.
-
-Format your response as a single, concise overall comment that summarizes the translation quality for the entire PR. Keep it friendly and constructive.
-
-If the translations look good overall, you can simply say "LGTM" or "All translations look good!"`
-  };
-
-  const content = `PR Title: ${prTitle}
-
-Ghost i18n context file for reference:
-${contextContent ? contextContent : 'Not available'}
-
-Files and changes in this PR:
-${allFileChanges.map((file, index) => 
-  `${index + 1}. ${file.filename}: ${file.additions} additions, ${file.deletions} deletions`
-).join('\n')}
-
-Please provide ONE overall assessment of the translation quality for this entire PR.`;
-
-  try {
-    const response = await openai.beta.chat.completions.parse({
-      model: "gpt-4.1",
-      messages: [
-        directions,
-        { role: 'assistant', content: content }
-      ],
-      response_format: {type: 'json_object'}
-    });
-    
-    if (!response.choices[0] || !response.choices[0].message || !response.choices[0].message.content || response.choices[0].refusal) {
-      console.log(chalk.red(`    ❌ AI overall analysis failed`));
-      return "❌ AI overall analysis failed";
-    }
-    
-    const aiResponse = JSON.parse(response.choices[0].message.content);
-    return aiResponse.overall || "My AI helper left you a few comments. I always believe the human over the AI, so feel free to disregard them! Leave me a comment when you're satisfied with everything, please. :)";
-
-  } catch (error) {
-    console.log(chalk.red(`    ❌ AI overall analysis failed:`), error.message);
-    return "❌ AI overall analysis failed";
-  }
-} 

@@ -72,8 +72,10 @@ node index.js analyze 1234 -o my-custom-report.json
 # Analyze with absolute path
 node index.js analyze 1234 -o /path/to/custom/report.json
 
-# Dry run (analyze without posting comments)
-node index.js analyze 1234 -d
+# NOTE: The `analyze` command never posts comments – it only creates the JSON
+#       report. Passing `-d / --dry-run` therefore has no effect and is kept
+#       only for CLI consistency. Use `-d` with the `review` command if you
+#       want to skip posting comments after analysis.
 ```
 
 ### Post Line Comments from Report

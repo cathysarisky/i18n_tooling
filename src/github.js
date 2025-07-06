@@ -139,12 +139,10 @@ export async function postComments(prNumber, reportFile) {
 function formatLineComment(item, type) {
   const icon = getIssueIcon(item.type);
   
-  let body = `${item.message}\n\n`;
+  let body = `🤖 AI: ${item.message}\n\n`;
   
   return body;
 }
-
-
 
 function formatOverallComment(overall) {
   return `📋 ${overall}\n\n---\n*Drafted with my new i18n tooling - feedback welcome*`;

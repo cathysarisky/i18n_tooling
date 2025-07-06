@@ -23,6 +23,7 @@ program
   .description('Analyze a specific PR and generate validation report')
   .option('-o, --output <file>', 'Output file for the report (relative to ai_validations/)', '')
   .option('-d, --dry-run', 'Run analysis without posting comments')
+  .option('--debug', 'Verbose logging – show full AI requests and responses')
   .action(async (prNumber, options) => {
     try {
       console.log(chalk.blue(`🔍 Analyzing PR #${prNumber}...`));
@@ -76,6 +77,7 @@ program
   .command('review <pr-number>')
   .description('Analyze a PR and post comments in one step')
   .option('-d, --dry-run', 'Run analysis without posting comments')
+  .option('--debug', 'Verbose logging – show full AI requests and responses')
   .action(async (prNumber, options) => {
     try {
       console.log(chalk.blue(`🔍 Starting full review process for PR #${prNumber}...`));
